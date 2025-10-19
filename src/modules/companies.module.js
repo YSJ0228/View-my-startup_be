@@ -35,21 +35,28 @@ companiesRouter.get("/", async (req, res, next) => {
       }
     }
 
-    const companies = await prisma.$queryRawUnsafe(`
-      SELECT sub.*, sub."investmentAmount"
-      FROM (
-        SELECT
-          c.*,
-          (SELECT COALESCE(SUM(i."invested_amount"), 0)
-          FROM "Investment" i
-          WHERE i."company_id" = c.id) AS "investmentAmount"
-        FROM "Company" c
-      ) sub
-      ${whereClause}
-      ${orderByClause};
-    `);
+    // Prisma ORM을 사용하여 안전하게 쿼리
+    const companies = await prisma.company.findMany({
+      where: ids ? { id: { in: ids.split(",").map(Number).filter(id => !isNaN(id)) } } : {},
+      include: {
+        investment: {
+          select: {
+            investedAmount: true
+          }
+        }
+      },
+      orderBy: sort ? {
+        [sort.split("_")[0]]: sort.split("_")[1]
+      } : { id: 'asc' }
+    });
 
-    res.json(companies);
+    // investmentAmount 계산
+    const companiesWithInvestment = companies.map(company => ({
+      ...company,
+      investmentAmount: company.investment.reduce((sum, inv) => sum + inv.investedAmount, 0)
+    }));
+
+    res.json(companiesWithInvestment);
   } catch (e) {
     next(e);
   }
