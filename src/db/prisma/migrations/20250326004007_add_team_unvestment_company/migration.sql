@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "Company" ADD COLUMN     "teamInvestment" DOUBLE PRECISION NOT NULL DEFAULT 0;

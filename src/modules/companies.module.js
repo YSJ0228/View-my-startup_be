@@ -89,9 +89,9 @@ companiesRouter.post("/", async (req, res, next) => {
       });
     }
 
-    // 이미 동일한 name이 존재하는지 확인
+    // 이미 동일한 companyName이 존재하는지 확인
     const existingCompany = await prisma.company.findUnique({
-      where: { name: companyName },
+      where: { companyName: companyName },
     });
 
     if (existingCompany) {
@@ -103,14 +103,14 @@ companiesRouter.post("/", async (req, res, next) => {
 
     // 회사 데이터 객체에 필수 필드와 선택적 필드 추가
     const companyData = {
-      name: companyName,
+      companyName: companyName,
       description,
       category,
-      totalInvestment: realInvestmentAmount || 0,
+      realInvestmentAmount: realInvestmentAmount || 0,
       revenue: revenue || 0,
-      employees: employeesNumber || 0,
-      selectedCompany: selectedNumber || 0,
-      comparedCompany: comparedNumber || 0,
+      employeesNumber: employeesNumber || 0,
+      selectedNumber: selectedNumber || 0,
+      comparedNumber: comparedNumber || 0,
       imageUrl: imageUrl || null, // 이미지 URL이 제공되지 않으면 null
     };
 
@@ -148,7 +148,7 @@ companiesRouter.post("/increase-selection", async (req, res, next) => {
     await prisma.company.update({
       where: { id: myCompanyId },
       data: {
-        selectedCompany: { increment: 1 },
+        selectedNumber: { increment: 1 },
       },
     });
 
@@ -160,7 +160,7 @@ companiesRouter.post("/increase-selection", async (req, res, next) => {
         },
       },
       data: {
-        comparedCompany: {
+        comparedNumber: {
           increment: 1,
         },
       },
