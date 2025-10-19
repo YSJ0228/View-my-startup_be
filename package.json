@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon ./src/app.js",
-    "start": "node ./src/app.js",
+    "start": "node -e \"if(process.env.RUN_SEED) require('./src/mock/seed.js')\" && node ./src/app.js",
     "seed": "node ./src/mock/seed.js",
     "postinstall": "npx prisma generate"
   },
