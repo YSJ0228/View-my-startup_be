@@ -4,7 +4,7 @@ const router = require("./modules/index.module");
 const errorHandler = require("./middlewares/errorHandler.middleware");
 
 const app = express();
-const PORT = 5001;
+const PORT = 5000;
 
 app.use(
   cors({
