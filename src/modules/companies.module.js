@@ -40,9 +40,9 @@ companiesRouter.get("/", async (req, res, next) => {
       FROM (
         SELECT
           c.*,
-          (SELECT COALESCE(SUM(i."investedAmount"), 0)
+          (SELECT COALESCE(SUM(i."invested_amount"), 0)
           FROM "Investment" i
-          WHERE i."companyId" = c.id) AS "investmentAmount"
+          WHERE i."company_id" = c.id) AS "investmentAmount"
         FROM "Company" c
       ) sub
       ${whereClause}
