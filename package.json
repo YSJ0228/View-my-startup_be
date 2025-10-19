@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon ./src/app.js",
-    "seed": "node prisma/seed.js"
+    "start": "node ./src/app.js",
+    "seed": "node ./src/mock/seed.js",
+    "postinstall": "npx prisma generate"
   },
   "repository": {
     "type": "git",
