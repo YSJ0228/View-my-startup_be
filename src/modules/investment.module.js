@@ -25,12 +25,12 @@ investmentRouter.post("/", async (req, res, next) => {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(accessCode, saltRounds);
 
-    // 투자 정보 저장
+    // 투자 정보 저장 (스키마 필드명은 amount)
     const newInvestment = await prisma.investment.create({
       data: {
         investorName,
         accessCode: hashedPassword,
-        investedAmount,
+        amount: investedAmount, // 프론트엔드에서 온 investedAmount를 스키마의 amount로 변환
         comment,
         companyId,
       },
@@ -52,7 +52,7 @@ investmentRouter.get("/", async (req, res, next) => {
     const investments = await prisma.investment.findMany({
       where: { companyId },
       orderBy: {
-        investedAmount: "desc",
+        amount: "desc", // 스키마 필드명은 amount
       },
     });
     res.status(200).json(investments);
@@ -89,7 +89,7 @@ investmentRouter.patch("/:investmentId", async (req, res) => {
       where: { id: parseInt(investmentId) },
       data: {
         investorName,
-        investedAmount,
+        amount: investedAmount, // 프론트엔드에서 온 investedAmount를 스키마의 amount로 변환
         comment,
         accessCode: hashedPassword,
       },
