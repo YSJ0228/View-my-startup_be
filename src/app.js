@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const router = require("./modules/index.module");
@@ -16,9 +16,12 @@ app.use(
   })
 );
 app.use(express.json());
+
+app.get("/api/ping", (req, res) => {
+  res.status(200).send("pong");
+});
+
 app.use("/api", router);
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  
-});
+app.listen(PORT, () => {});
